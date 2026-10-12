@@ -1,0 +1,166 @@
+-- MCM page and live adjustment window for EGUI's bundled AltIcons row.
+
+local positioner_gui = nil
+
+local commands = {
+	{key = "offset_x", min = -500, max = 500, step = 1, def = 0},
+	{key = "offset_y", min = -350, max = 350, step = 1, def = 0},
+	{key = "spacing", min = -12, max = 40, step = 1, def = 2},
+}
+
+local function path(key)
+	return "sep_egui_alticons_positioning/" .. key
+end
+
+local function level_present()
+	return level.present()
+end
+
+local function apply(command, value)
+	if ui_mcm then
+		ui_mcm.set(path(command.key), value)
+	end
+	if zzz_sep_egui_alticons_positioning then
+		zzz_sep_egui_alticons_positioning.apply_settings()
+	end
+end
+
+local function set_preview(enabled)
+	if zzz_sep_egui_alticons_positioning then
+		zzz_sep_egui_alticons_positioning.set_preview(enabled)
+	end
+end
+
+function on_mcm_load()
+	return {
+		id = "sep_egui_alticons_positioning",
+		sh = true,
+		gr = {
+			{id = "title", type = "title", text = "ui_mcm_sep_egui_alticons_positioning_title"},
+			{id = "hint", type = "desc", text = "ui_mcm_sep_egui_alticons_positioning_hint"},
+			{id = "offset_x", type = "track", val = 2, def = 0, min = -500, max = 500, step = 1},
+			{id = "offset_y", type = "track", val = 2, def = 0, min = -350, max = 350, step = 1},
+			{id = "spacing", type = "track", val = 2, def = 2, min = -12, max = 40, step = 1},
+			{id = "preview", type = "button", functor_ui = {start_ui}, precondition = {level_present}},
+			{id = "reset", type = "button", functor_ui = {reset_defaults}},
+		},
+	}
+end
+
+function on_option_change()
+	if zzz_sep_egui_alticons_positioning then
+		zzz_sep_egui_alticons_positioning.apply_settings()
+	end
+end
+
+function reset_defaults(self)
+	if self and self.OnButton_Default then
+		self:OnButton_Default()
+	end
+end
+
+function start_ui(self)
+	if self and self.On_Cancel then
+		self:On_Cancel()
+	end
+	if not level.present() then
+		return
+	end
+
+	exec_console_cmd("main_menu off")
+	if not positioner_gui then
+		positioner_gui = SepEguiAlticonsPositionControl()
+	end
+	if not positioner_gui:IsShown() then
+		set_preview(true)
+		positioner_gui:ShowDialog(true)
+		Register_UI("SepEguiAlticonsPositionControl", "zzz_sep_egui_alticons_positioning_mcm")
+	end
+end
+
+class "SepEguiAlticonsPositionControl" (CUIScriptWnd)
+
+function SepEguiAlticonsPositionControl:__init() super()
+	self:InitControls()
+	RegisterScriptCallback("actor_on_net_destroy", self)
+end
+
+function SepEguiAlticonsPositionControl:__finalize()
+	set_preview(false)
+	positioner_gui = nil
+end
+
+function SepEguiAlticonsPositionControl:actor_on_net_destroy()
+	self:Close()
+end
+
+function SepEguiAlticonsPositionControl:InitControls()
+	self:SetWndRect(Frect():set(0, 0, 1024, 768))
+	self:SetAutoDelete(true)
+
+	local xml = CScriptXmlInit()
+	xml:ParseFile("ui_options.xml")
+	self.dialog = xml:InitStatic("ctrl_lighting", self)
+	xml:InitFrame("ctrl_lighting:frame", self.dialog)
+
+	local title = xml:InitStatic("ctrl_lighting:cap_main", self.dialog)
+	title:TextControl():SetText(game.translate_string("ui_mcm_sep_egui_alticons_positioning_preview_title"))
+
+	self.scroll = xml:InitScrollView("ctrl_lighting:scroll", self.dialog)
+	self.scroll:Clear()
+	self.track = {}
+	self.value = {}
+
+	for index, command in ipairs(commands) do
+		local row = xml:InitStatic("ctrl_lighting:st", nil)
+		local caption = xml:InitStatic("ctrl_lighting:cap", row)
+		caption:TextControl():SetText(game.translate_string(
+			"ui_mcm_sep_egui_alticons_positioning_" .. command.key
+		))
+
+		local value = ui_mcm.get(path(command.key)) or command.def
+		self.track[index] = xml:InitTrackBar("ctrl_lighting:track", row)
+		self.track[index]:SetStep(command.step)
+		self.track[index]:SetOptFBounds(command.min, command.max)
+		self.track[index]:SetFValue(value)
+		self.value[index] = value
+
+		local number = xml:InitTextWnd("ctrl_lighting:num", row)
+		number:SetText(tostring(value))
+		self["number_" .. index] = number
+
+		self.scroll:AddWindow(row, true)
+		row:SetAutoDelete(true)
+	end
+end
+
+function SepEguiAlticonsPositionControl:Update()
+	CUIScriptWnd.Update(self)
+
+	for index, track in ipairs(self.track) do
+		if track:IsCursorOverWindow() then
+			local value = round_idp(track:GetFValue(), 0)
+			if value ~= self.value[index] then
+				self.value[index] = value
+				apply(commands[index], value)
+				self["number_" .. index]:SetText(tostring(value))
+			end
+		end
+	end
+end
+
+function SepEguiAlticonsPositionControl:OnKeyboard(dik, keyboard_action)
+	local result = CUIScriptWnd.OnKeyboard(self, dik, keyboard_action)
+	if keyboard_action == ui_events.WINDOW_KEY_PRESSED and dik == DIK_keys.DIK_ESCAPE then
+		self:Close()
+	end
+	return result
+end
+
+function SepEguiAlticonsPositionControl:Close()
+	self:HideDialog()
+	self:Show(false)
+	Unregister_UI("SepEguiAlticonsPositionControl")
+	positioner_gui = nil
+	set_preview(false)
+end

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<string_table>
+	<string id="ui_mcm_sep_egui_alticons_positioning"><text>Положение AltIcons EGUI</text></string>
+	<string id="ui_mcm_menu_sep_egui_alticons_positioning"><text>Положение AltIcons EGUI</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_title"><text>Положение AltIcons EGUI</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_hint"><text>Перемещение всей строки AltIcons из EGUI и настройка интервала. В режиме превью таймеры остаются привязаны к своим иконкам.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_x"><text>Смещение по горизонтали</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_x_desc"><text>Перемещает всю строку AltIcons EGUI влево или вправо.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_y"><text>Смещение по вертикали</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_y_desc"><text>Перемещает всю строку AltIcons EGUI вверх или вниз.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_spacing"><text>Интервал между иконками</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_spacing_desc"><text>Изменяет расстояние между соседними иконками AltIcons EGUI.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview"><text>Предпросмотр / настройка</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview_desc"><text>Открывает настройку в игре и временно показывает все иконки EGUI с примерами таймеров усилений.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_reset"><text>Сбросить настройки</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_reset_desc"><text>Возвращает исходное положение EGUI и интервал в два пикселя.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview_title"><text>Положение AltIcons EGUI</text></string>
+</string_table>

@@ -1,0 +1,239 @@
+-- Live positioning for the AltIcons implementation bundled with EGUI.
+-- EGUI timer labels use absolute HUD coordinates, unlike the panel-local icons.
+
+local MCM_ID = "sep_egui_alticons_positioning"
+local DEFAULT_X = 0
+local DEFAULT_Y = 0
+local DEFAULT_SPACING = 2
+
+local preview_active = false
+local patched = false
+local original_init_controls = nil
+local original_update = nil
+local first_update_callback = nil
+
+local ICON_ELEMENTS = {"back_s", "back_f", "icon_s", "icon_f"}
+
+local function option_value(key, default)
+	if ui_mcm then
+		local value = ui_mcm.get(MCM_ID .. "/" .. key)
+		if value ~= nil then
+			return value
+		end
+	end
+	return default
+end
+
+local function alticons_scale()
+	return alticons and alticons.size_adjust or 1
+end
+
+local function alticons_ratio()
+	return (device().height / device().width) / (768 / 1024)
+end
+
+local function remember_base_position(hud)
+	if not hud or not hud.dialog or hud.sep_egui_alticons_base_x ~= nil then
+		return
+	end
+
+	local position = hud.dialog:GetWndPos()
+	hud.sep_egui_alticons_base_x = position.x
+	hud.sep_egui_alticons_base_y = position.y
+end
+
+local function position_timer(hud, slot)
+	if not hud or not hud.dialog or not slot or not slot.xcvb_time then
+		return
+	end
+
+	local icon = slot.icon_f or slot.icon_s
+	if not icon then
+		return
+	end
+
+	local dialog_position = hud.dialog:GetWndPos()
+	local icon_position = icon:GetWndPos()
+	local timer_height = slot.xcvb_time:GetHeight()
+
+	slot.xcvb_time:SetWndPos(vector2():set(
+		dialog_position.x + icon_position.x,
+		dialog_position.y + icon_position.y - 15
+	))
+	slot.xcvb_time:SetWndSize(vector2():set(icon:GetWidth(), timer_height))
+end
+
+local function place_slots(hud, spacing)
+	if not hud or not hud.slot then
+		return
+	end
+
+	hud.offset = spacing * alticons_ratio() * alticons_scale()
+	local slot_step = hud.W + hud.offset
+
+	for index, slot in ipairs(hud.slot) do
+		local x = (index - 1) * slot_step
+		if hud.mirrored then
+			x = (1 - index) * slot_step
+		end
+
+		for _, key in ipairs(ICON_ELEMENTS) do
+			local element = slot[key]
+			if element then
+				local position = element:GetWndPos()
+				element:SetWndPos(vector2():set(x, position.y))
+			end
+		end
+
+		position_timer(hud, slot)
+	end
+end
+
+function refresh_layout(hud)
+	hud = hud or (actor_status and actor_status.HUD)
+	if not hud or not hud.dialog then
+		return
+	end
+
+	remember_base_position(hud)
+
+	local offset_x = option_value("offset_x", DEFAULT_X)
+	local offset_y = option_value("offset_y", DEFAULT_Y)
+	local spacing = option_value("spacing", DEFAULT_SPACING)
+
+	hud.dialog:SetWndPos(vector2():set(
+		hud.sep_egui_alticons_base_x + offset_x,
+		hud.sep_egui_alticons_base_y + offset_y
+	))
+	place_slots(hud, spacing)
+
+	hud.sep_egui_alticons_offset_x = offset_x
+	hud.sep_egui_alticons_offset_y = offset_y
+	hud.sep_egui_alticons_spacing = spacing
+end
+
+local function sync_mcm_layout(hud)
+	local offset_x = option_value("offset_x", DEFAULT_X)
+	local offset_y = option_value("offset_y", DEFAULT_Y)
+	local spacing = option_value("spacing", DEFAULT_SPACING)
+
+	if offset_x ~= hud.sep_egui_alticons_offset_x
+	or offset_y ~= hud.sep_egui_alticons_offset_y
+	or spacing ~= hud.sep_egui_alticons_spacing then
+		refresh_layout(hud)
+	else
+		for _, slot in ipairs(hud.slot or {}) do
+			position_timer(hud, slot)
+		end
+	end
+end
+
+local function hide_slot(slot)
+	for _, element in pairs(slot) do
+		element:Show(false)
+	end
+end
+
+local function show_preview(hud)
+	if not hud or not hud.dialog or not hud.slot then
+		return
+	end
+
+	local index = 0
+	for _, indicator in spairs(actor_status.indicators, actor_status.func_index) do
+		index = index + 1
+		local slot = hud.slot[index]
+		if slot then
+			hide_slot(slot)
+
+			if indicator.background and slot.back_s then
+				slot.back_s:InitTexture(indicator.background)
+				slot.back_s:SetTextureColor(hud.clr_list[0])
+				slot.back_s:Show(true)
+			end
+			if indicator.icon and slot.icon_s then
+				slot.icon_s:InitTexture(indicator.icon)
+				slot.icon_s:Show(true)
+			end
+			if indicator.typ == "booster" and slot.xcvb_time then
+				slot.xcvb_time:SetText("120")
+				slot.xcvb_time:Show(true)
+				position_timer(hud, slot)
+			end
+		end
+	end
+
+	hud.index = index
+	hud.dialog:Show(index > 0)
+end
+
+function set_preview(enabled)
+	preview_active = enabled and true or false
+
+	local hud = actor_status and actor_status.HUD
+	if hud then
+		refresh_layout(hud)
+		hud:Update(true)
+	end
+end
+
+function apply_settings()
+	local hud = actor_status and actor_status.HUD
+	if hud then
+		refresh_layout(hud)
+		hud:Update(true)
+	end
+end
+
+function is_available()
+	return patched and actor_status and actor_status.HUD ~= nil
+end
+
+local function patch_egui_alticons()
+	if patched then
+		return
+	end
+	if sep_hud_positioning then
+		printf("! EGUI AltIcons Positioning: Sephellive HUD Positioning is active; disable it to avoid wrapping the same HUD twice")
+		return
+	end
+	if not alticons or not actor_status or not actor_status.UIIndicators then
+		printf("! EGUI AltIcons Positioning: EGUI AltIcons was not found; runtime patch skipped")
+		return
+	end
+
+	original_init_controls = actor_status.UIIndicators.InitControls
+	original_update = actor_status.UIIndicators.Update
+	if not original_init_controls or not original_update then
+		printf("! EGUI AltIcons Positioning: UIIndicators methods were not found; runtime patch skipped")
+		return
+	end
+
+	function actor_status.UIIndicators:InitControls()
+		original_init_controls(self)
+		remember_base_position(self)
+		refresh_layout(self)
+	end
+
+	function actor_status.UIIndicators:Update(force)
+		original_update(self, force)
+		sync_mcm_layout(self)
+		if preview_active then
+			show_preview(self)
+		end
+	end
+
+	patched = true
+end
+
+function on_game_start()
+	patch_egui_alticons()
+
+	first_update_callback = function()
+		patch_egui_alticons()
+		apply_settings()
+		UnregisterScriptCallback("actor_on_first_update", first_update_callback)
+		first_update_callback = nil
+	end
+	RegisterScriptCallback("actor_on_first_update", first_update_callback)
+end

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<string_table>
+	<string id="ui_mcm_sep_egui_alticons_positioning"><text>EGUI AltIcons Positioning</text></string>
+	<string id="ui_mcm_menu_sep_egui_alticons_positioning"><text>EGUI AltIcons Positioning</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_title"><text>EGUI AltIcons Positioning</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_hint"><text>Move EGUI's complete AltIcons row and adjust spacing. Preview keeps booster timers anchored to their icons.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_x"><text>Horizontal offset</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_x_desc"><text>Moves the complete EGUI AltIcons row left or right.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_y"><text>Vertical offset</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_y_desc"><text>Moves the complete EGUI AltIcons row up or down.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_spacing"><text>Icon spacing</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_spacing_desc"><text>Changes the gap between adjacent EGUI AltIcon slots.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview"><text>Preview / Adjust</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview_desc"><text>Opens live controls and temporarily displays all EGUI AltIcons plus sample booster timers.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_reset"><text>Reset to defaults</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_reset_desc"><text>Restores EGUI's original offsets and two-pixel spacing.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview_title"><text>EGUI AltIcons Positioning</text></string>
+</string_table>

@@ -1,64 +1,59 @@
-# &lt;Addon Name&gt;
+# EGUI AltIcons Positioning
 
-Short description of the addon.
+Dedicated live positioning addon for the AltIcons implementation bundled with Enhanced Graphical User Interface 0.6.6a for S.T.A.L.K.E.R. Anomaly 1.5.3.
 
-This repository is a template for small, independent S.T.A.L.K.E.R. Anomaly addons. Replace the placeholders, add the addon files under `gamedata`, and develop the mod without a separate build system.
+It moves the complete EGUI AltIcons row, adjusts icon spacing, and keeps booster countdown timers anchored to their corresponding icons. The in-game adjustment window temporarily previews every EGUI AltIcon and representative booster timers without adding gameplay effects.
+
+This is a new standalone addon. It does not modify or depend on `sephellive-hud-positioning`.
 
 ## Requirements
 
 - S.T.A.L.K.E.R. Anomaly 1.5.3
-- [Anomaly Modded Exes](https://github.com/themrdemonized/xray-monolith) when the addon uses DLTX or another engine extension
-- Git LFS when the addon contains binary assets tracked by `.gitattributes`
+- Enhanced Graphical User Interface 0.6.6a with its bundled AltIcons script
+- Anomaly Mod Configuration Menu (MCM)
 
 ## Installation
 
-Download the ZIP from the latest GitHub Release and extract it directly into the S.T.A.L.K.E.R. Anomaly directory. The archive starts with `gamedata/`; it has no extra wrapper directory.
+Install the release ZIP with Mod Organizer 2 after EGUI. Disable Sephellive HUD Positioning if it is installed; both addons wrap the same runtime HUD class and must not be active together.
 
-For a local checkout, run:
+Restart the game, then open **MCM -> EGUI AltIcons Positioning**.
 
-```powershell
-./tools/install.ps1 -GamePath "D:\Stalker\Anomaly-Test"
-```
+The release archive starts directly with `gamedata/` and has no wrapper directory. A new game is not required.
 
-The installer copies and updates this addon's files. It does not delete the game's existing `gamedata` or files belonging to other addons.
+## Configuration
 
-To download and install the latest GitHub Release instead of the local files:
+- Horizontal offset moves the complete AltIcons row left or right.
+- Vertical offset moves the complete row up or down.
+- Icon spacing changes the gap between adjacent icon slots.
+- Preview / Adjust opens an in-game live-positioning window.
+- Reset to defaults restores EGUI's original offsets and two-pixel spacing.
 
-```powershell
-./tools/install.ps1 -GamePath "D:\Stalker\Anomaly-Test" -Latest
-```
+Settings apply immediately and are stored by MCM.
 
-`-Latest` derives the repository from the `origin` remote. Public releases need no token. For a private repository, set `GH_TOKEN` or `GITHUB_TOKEN` to a token that can read the repository. Local installation never uses the GitHub API.
+## Timer-safe layout
 
-## Development
+EGUI creates icons and backgrounds as children of the AltIcons panel, but creates booster countdown labels as separate windows with absolute HUD coordinates. Moving all slot elements as if they shared the same coordinate system displaces those timers.
 
-Create a repository from this template, then clone it:
+This addon therefore:
 
-```powershell
-git clone https://github.com/<owner>/<repository>.git
-cd <repository>
-git lfs install
-```
+1. moves only icon and background layers in panel-local coordinates;
+2. moves the panel itself by the configured X/Y offset;
+3. recalculates every timer from the final panel and icon positions;
+4. repeats that timer anchoring whenever the live layout changes.
 
-Put only the files shipped by the addon under `gamedata/`. Add standard Anomaly directories such as `textures`, `meshes`, `sounds`, or `shaders` only when the addon needs them. The tracked `.gitkeep` files only preserve the starter directories and are excluded from release ZIPs.
+## Compatibility
 
-For DLTX, the filename must identify the original root LTX file: `mod_<base-file-name>_sep_<module>.ltx`. For example, a patch to `system.ltx` can be named `mod_system_sep_economy.ltx`. Place it beside the root file it patches. Do not use DLTX syntax unless the addon declares Modded Exes as a requirement.
+- Does not replace `actor_status.script`, `alticons.script`, or any EGUI XML/texture.
+- Does not alter status values, booster durations, or gameplay state.
+- Must not be enabled together with Sephellive HUD Positioning.
+- Addons that replace `actor_status.UIIndicators.InitControls` or `Update` after this addon may require a compatibility patch.
+- Removing the addon is save-safe.
 
-## Branching
+## Credits
 
-- `master` is stable and releasable.
-- `feature/*` is for development and testing.
-
-## Releases
-
-Every push or merge to `master` runs GitHub Actions. The workflow packages `gamedata/`, creates version `v0.0.<run number>`, creates the matching Git tag and GitHub Release with generated notes, and uploads `<repository>-<version>.zip`.
-
-Rerunning the same workflow keeps the same version and replaces the release asset instead of creating a conflicting tag.
-
-## Git LFS
-
-The template tracks common binary game assets (`.dds`, `.ogf`, `.object`, `.ogg`, `.wav`, `.tga`, and `.png`) with Git LFS. Install Git LFS before adding those files and ensure CI has access to the LFS objects. Text files such as LTX, Lua scripts, Markdown, YAML, and PowerShell remain in normal Git history.
+- INC and RavenAscendant — EGUI and its bundled AltIcons implementation.
+- Sephellive HUD Positioning — reference for the live preview and adjustment workflow.
 
 ## License
 
-No license is selected by this template. Replace `LICENSE` with the license appropriate for your original work before publishing. Do not grant rights to game assets or third-party material you do not own.
+The original code in this repository is licensed under the MIT License. Third-party addons and game assets remain the property of their respective authors.
