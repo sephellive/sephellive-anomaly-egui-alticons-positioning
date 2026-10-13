@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="windows-1251"?>
 <string_table>
-	<string id="ui_mcm_sep_egui_alticons_positioning"><text>РџРѕР»РѕР¶РµРЅРёРµ AltIcons EGUI</text></string>
-	<string id="ui_mcm_menu_sep_egui_alticons_positioning"><text>РџРѕР»РѕР¶РµРЅРёРµ AltIcons EGUI</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_title"><text>РџРѕР»РѕР¶РµРЅРёРµ AltIcons EGUI</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_hint"><text>РџРµСЂРµРјРµС‰РµРЅРёРµ РІСЃРµР№ СЃС‚СЂРѕРєРё AltIcons РёР· EGUI Рё РЅР°СЃС‚СЂРѕР№РєР° РёРЅС‚РµСЂРІР°Р»Р°. Р’ СЂРµР¶РёРјРµ РїСЂРµРІСЊСЋ С‚Р°Р№РјРµСЂС‹ РѕСЃС‚Р°СЋС‚СЃСЏ РїСЂРёРІСЏР·Р°РЅС‹ Рє СЃРІРѕРёРј РёРєРѕРЅРєР°Рј.</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_offset_x"><text>РЎРјРµС‰РµРЅРёРµ РїРѕ РіРѕСЂРёР·РѕРЅС‚Р°Р»Рё</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_offset_x_desc"><text>РџРµСЂРµРјРµС‰Р°РµС‚ РІСЃСЋ СЃС‚СЂРѕРєСѓ AltIcons EGUI РІР»РµРІРѕ РёР»Рё РІРїСЂР°РІРѕ.</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_offset_y"><text>РЎРјРµС‰РµРЅРёРµ РїРѕ РІРµСЂС‚РёРєР°Р»Рё</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_offset_y_desc"><text>РџРµСЂРµРјРµС‰Р°РµС‚ РІСЃСЋ СЃС‚СЂРѕРєСѓ AltIcons EGUI РІРІРµСЂС… РёР»Рё РІРЅРёР·.</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_spacing"><text>РРЅС‚РµСЂРІР°Р» РјРµР¶РґСѓ РёРєРѕРЅРєР°РјРё</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_spacing_desc"><text>РР·РјРµРЅСЏРµС‚ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ СЃРѕСЃРµРґРЅРёРјРё РёРєРѕРЅРєР°РјРё AltIcons EGUI.</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_preview"><text>РџСЂРµРґРїСЂРѕСЃРјРѕС‚СЂ / РЅР°СЃС‚СЂРѕР№РєР°</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_preview_desc"><text>РћС‚РєСЂС‹РІР°РµС‚ РЅР°СЃС‚СЂРѕР№РєСѓ РІ РёРіСЂРµ Рё РІСЂРµРјРµРЅРЅРѕ РїРѕРєР°Р·С‹РІР°РµС‚ РІСЃРµ РёРєРѕРЅРєРё EGUI СЃ РїСЂРёРјРµСЂР°РјРё С‚Р°Р№РјРµСЂРѕРІ СѓСЃРёР»РµРЅРёР№.</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_reset"><text>РЎР±СЂРѕСЃРёС‚СЊ РЅР°СЃС‚СЂРѕР№РєРё</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_reset_desc"><text>Р’РѕР·РІСЂР°С‰Р°РµС‚ РёСЃС…РѕРґРЅРѕРµ РїРѕР»РѕР¶РµРЅРёРµ EGUI Рё РёРЅС‚РµСЂРІР°Р» РІ РґРІР° РїРёРєСЃРµР»СЏ.</text></string>
-	<string id="ui_mcm_sep_egui_alticons_positioning_preview_title"><text>РџРѕР»РѕР¶РµРЅРёРµ AltIcons EGUI</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning"><text>Положение AltIcons EGUI</text></string>
+	<string id="ui_mcm_menu_sep_egui_alticons_positioning"><text>Положение AltIcons EGUI</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_title"><text>Положение AltIcons EGUI</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_hint"><text>Перемещение всей строки AltIcons из EGUI и настройка интервала. В режиме превью таймеры остаются привязаны к своим иконкам.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_x"><text>Смещение по горизонтали</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_x_desc"><text>Перемещает всю строку AltIcons EGUI влево или вправо.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_y"><text>Смещение по вертикали</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_offset_y_desc"><text>Перемещает всю строку AltIcons EGUI вверх или вниз.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_spacing"><text>Интервал между иконками</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_spacing_desc"><text>Изменяет расстояние между соседними иконками AltIcons EGUI.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview"><text>Предпросмотр / настройка</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview_desc"><text>Открывает настройку в игре и временно показывает все иконки EGUI с примерами таймеров усилений.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_reset"><text>Сбросить настройки</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_reset_desc"><text>Возвращает исходное положение EGUI и интервал в два пикселя.</text></string>
+	<string id="ui_mcm_sep_egui_alticons_positioning_preview_title"><text>Положение AltIcons EGUI</text></string>
 </string_table>

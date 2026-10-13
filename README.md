@@ -30,6 +30,8 @@ The release archive starts directly with `gamedata/` and has no wrapper director
 
 Settings apply immediately and are stored by MCM.
 
+English and Russian MCM string tables use Windows-1251, matching the Anomaly runtime localization loader.
+
 ## Timer-safe layout
 
 EGUI creates icons and backgrounds as children of the AltIcons panel, but creates booster countdown labels as separate windows with absolute HUD coordinates. Moving all slot elements as if they shared the same coordinate system displaces those timers.
